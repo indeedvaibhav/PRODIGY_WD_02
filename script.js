@@ -70,8 +70,8 @@ function start() {
 }
 
 function pause() {
+  elapsedBeforePause = currentElapsedMs(); // must run while `running` is still true
   running = false;
-  elapsedBeforePause = currentElapsedMs();
   cancelAnimationFrame(rafId);
   statePillEl.textContent = 'paused';
   statePillEl.classList.remove('running');
