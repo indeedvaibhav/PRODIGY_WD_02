@@ -1,0 +1,315 @@
+/* ---------- Tokens ---------- */
+:root {
+  --night: #0B0D12;
+  --night-2: #12151D;
+  --track-orange: #FF6A2B;
+  --track-orange-dim: #C94E1C;
+  --lane: #F5F5F0;
+  --lane-dim: rgba(245, 245, 240, 0.55);
+  --fast: #4CD787;
+  --slow: #FF5A5A;
+  --line: rgba(245, 245, 240, 0.1);
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--night);
+  color: var(--lane);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Decorative lane lines running across the background, like a track surface */
+.track-lines {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 118px,
+      rgba(255, 106, 43, 0.06) 118px,
+      rgba(255, 106, 43, 0.06) 120px
+    );
+}
+
+.topbar {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 48px 24px 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  color: var(--track-orange);
+  font-size: 1.4rem;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.04em;
+}
+
+.brand-tag {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--lane-dim);
+  margin-top: 4px;
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+/* ---------- Watch face ---------- */
+.watch {
+  position: relative;
+  width: 280px;
+  height: 280px;
+}
+
+.ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-track {
+  fill: none;
+  stroke: rgba(245, 245, 240, 0.08);
+  stroke-width: 6;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: var(--track-orange);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 628.3; /* 2 * PI * 100 */
+  stroke-dashoffset: 628.3;
+  transition: stroke-dashoffset 0.1s linear;
+  filter: drop-shadow(0 0 8px rgba(255, 106, 43, 0.5));
+}
+
+.readout {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.time-main {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 2.8rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.time-centis {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--track-orange);
+  margin-top: -6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.state-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--lane-dim);
+  border: 1px solid var(--line);
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-top: 6px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.state-pill.running {
+  color: var(--fast);
+  border-color: rgba(76, 215, 135, 0.4);
+}
+
+.state-pill.paused {
+  color: var(--track-orange);
+  border-color: rgba(255, 106, 43, 0.4);
+}
+
+/* ---------- Controls ---------- */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.94);
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  width: 96px;
+  height: 96px;
+  background: var(--track-orange);
+  color: var(--night);
+  font-size: 1rem;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #FF7E48;
+}
+.btn-primary.is-running {
+  background: var(--lane);
+}
+
+.btn-secondary {
+  width: 72px;
+  height: 72px;
+  background: var(--night-2);
+  border: 1px solid var(--line);
+  color: var(--lane);
+  font-size: 0.85rem;
+}
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--track-orange);
+  color: var(--track-orange);
+}
+
+.btn-label {
+  font-size: 0.85rem;
+}
+.btn-key {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  opacity: 0.5;
+  text-transform: uppercase;
+}
+
+/* ---------- Laps panel ---------- */
+.laps-panel {
+  width: 100%;
+  background: var(--night-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.laps-header {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1.4fr;
+  padding: 14px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--lane-dim);
+  border-bottom: 1px solid var(--line);
+}
+.laps-header span:nth-child(2),
+.laps-header span:nth-child(3) {
+  text-align: right;
+}
+
+.laps-list {
+  list-style: none;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.laps-empty {
+  padding: 28px 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--lane-dim);
+}
+.laps-empty strong {
+  color: var(--lane);
+}
+
+.lap-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1.4fr;
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--line);
+  animation: lapIn 0.3s ease;
+}
+.lap-row:last-child { border-bottom: none; }
+.lap-row span:nth-child(2),
+.lap-row span:nth-child(3) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.lap-row.fastest .lap-split { color: var(--fast); font-weight: 700; }
+.lap-row.slowest .lap-split { color: var(--slow); font-weight: 700; }
+
+@keyframes lapIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.footer-meta {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: rgba(245, 245, 240, 0.3);
+  padding: 20px 24px 40px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 400px) {
+  .watch { width: 240px; height: 240px; }
+  .time-main { font-size: 2.3rem; }
+  .btn-primary { width: 84px; height: 84px; }
+  .btn-secondary { width: 64px; height: 64px; }
+}
