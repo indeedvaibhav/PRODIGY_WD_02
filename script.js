@@ -8,6 +8,7 @@ const resetBtn = document.getElementById('resetBtn');
 const lapBtn = document.getElementById('lapBtn');
 const lapsListEl = document.getElementById('lapsList');
 const lapsEmptyEl = document.getElementById('lapsEmpty');
+const watchEl = document.querySelector('.watch');
 
 // ---------- State ----------
 let running = false;
@@ -16,7 +17,7 @@ let elapsedBeforePause = 0; // accumulated ms from previous run segments
 let rafId = null;
 let laps = []; // { splitMs, totalMs }
 
-const RING_CIRCUMFERENCE = 628.3; // 2 * PI * r(100)
+const RING_CIRCUMFERENCE = 590.6; // 2 * PI * r(94)
 const RING_LOOP_MS = 60000; // one full ring revolution = 60 seconds, like a stopwatch dial
 
 // ---------- Helpers ----------
@@ -64,6 +65,7 @@ function start() {
   startBtn.classList.add('is-running');
   resetBtn.disabled = true;
   lapBtn.disabled = false;
+  watchEl.classList.add('is-running');
   rafId = requestAnimationFrame(tick);
 }
 
@@ -78,6 +80,7 @@ function pause() {
   startBtn.classList.remove('is-running');
   resetBtn.disabled = false;
   lapBtn.disabled = true;
+  watchEl.classList.remove('is-running');
 }
 
 function reset() {
@@ -92,6 +95,7 @@ function reset() {
   startBtn.classList.remove('is-running');
   resetBtn.disabled = true;
   lapBtn.disabled = true;
+  watchEl.classList.remove('is-running');
   renderLaps();
 }
 
@@ -127,11 +131,13 @@ function renderLaps() {
 
     const { main: splitMain, centis: splitCentis } = formatTime(lap.splitMs);
     const { main: totalMain, centis: totalCentis } = formatTime(lap.totalMs);
+    const barPct = hasVariance ? Math.max(8, (lap.splitMs / slowest) * 100) : 100;
 
     row.innerHTML = `
       <span class="lap-num">Lap ${lapNumber}</span>
       <span class="lap-split">${splitMain}${splitCentis}</span>
       <span class="lap-total">${totalMain}${totalCentis}</span>
+      <span class="lap-bar" style="width: ${barPct}%"></span>
     `;
     lapsListEl.appendChild(row);
   });
