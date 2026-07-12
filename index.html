@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Split — Stopwatch &amp; Lap Timer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="track-lines" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◎</span>
+      <span class="brand-name">Split</span>
+    </div>
+    <p class="brand-tag">lap timer for people who count seconds</p>
+  </header>
+
+  <main class="stage">
+
+    <!-- Circular progress ring + digital readout -->
+    <div class="watch">
+      <svg class="ring" viewBox="0 0 220 220">
+        <circle class="ring-track" cx="110" cy="110" r="100"></circle>
+        <circle class="ring-progress" id="ringProgress" cx="110" cy="110" r="100"></circle>
+      </svg>
+
+      <div class="readout">
+        <span class="time-main" id="timeMain">00:00</span>
+        <span class="time-centis" id="timeCentis">.00</span>
+        <span class="state-pill" id="statePill">ready</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn btn-secondary" id="resetBtn" disabled>
+        <span class="btn-label">Reset</span>
+        <span class="btn-key">R</span>
+      </button>
+      <button class="btn btn-primary" id="startBtn">
+        <span class="btn-label">Start</span>
+        <span class="btn-key">Space</span>
+      </button>
+      <button class="btn btn-secondary" id="lapBtn" disabled>
+        <span class="btn-label">Lap</span>
+        <span class="btn-key">L</span>
+      </button>
+    </div>
+
+    <!-- Lap list -->
+    <section class="laps-panel">
+      <div class="laps-header">
+        <span>Lap</span>
+        <span>Split</span>
+        <span>Total</span>
+      </div>
+      <ul class="laps-list" id="lapsList">
+        <li class="laps-empty" id="lapsEmpty">No laps yet — hit <strong>Lap</strong> once you're running.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="footer-meta">Task-02 · Stopwatch Web Application · Prodigy InfoTech Internship</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
