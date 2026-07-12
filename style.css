@@ -392,6 +392,89 @@ body::after {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ---------- Personal-best glow pulse ---------- */
+@keyframes bestGlow {
+  0%, 100% { box-shadow: none; }
+  30% { box-shadow: 0 0 0 3px rgba(76, 215, 135, 0.55), 0 0 18px rgba(76, 215, 135, 0.35); }
+  70% { box-shadow: 0 0 0 2px rgba(76, 215, 135, 0.3), 0 0 10px rgba(76, 215, 135, 0.2); }
+}
+
+@keyframes ringBestGlow {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 106, 43, 0.65)); }
+  30% { filter: drop-shadow(0 0 18px rgba(76, 215, 135, 0.9)) drop-shadow(0 0 6px rgba(76, 215, 135, 0.6)); }
+  70% { filter: drop-shadow(0 0 12px rgba(76, 215, 135, 0.55)); }
+}
+
+.ring-progress.personal-best {
+  animation: ringBestGlow 0.6s ease forwards;
+}
+
+.lap-row.personal-best {
+  animation: lapIn 0.3s ease, bestGlow 0.6s ease forwards;
+}
+
+/* ---------- Toast / snackbar ---------- */
+.toast-container {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  background: var(--night-2);
+  color: var(--lane);
+  border: 1px solid var(--line);
+  padding: 9px 20px;
+  border-radius: 100px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.toast.toast-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.toast.toast-best {
+  border-color: rgba(76, 215, 135, 0.5);
+  color: var(--fast);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 14px rgba(76, 215, 135, 0.2);
+}
+
+/* ---------- Reset long-press radial fill ---------- */
+#resetBtn {
+  overflow: hidden;
+  position: relative;
+}
+
+.reset-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  background: conic-gradient(rgba(255, 106, 43, 0.35) var(--fill-pct, 0%), transparent var(--fill-pct, 0%));
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  pointer-events: none;
+}
+
+#resetBtn.pressing .reset-fill {
+  opacity: 1;
+}
+
 .footer-meta {
   position: relative;
   z-index: 1;
